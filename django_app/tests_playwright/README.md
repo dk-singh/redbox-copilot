@@ -4,14 +4,12 @@ The tests are currently located at `django_app/tests_playwright`. All commands b
 
 ## Setup
 
-`poetry add pytest-playwright`
-
-`playwright install`
-
-`poetry add axe-playwright-python`
+`poetry run playwright install`
 
 ## Running tests
 
-`pytest -s`
+From `django_app/tests_playwright` directory:
 
-Commandline options are documented here: https://playwright.dev/python/docs/running-tests
+`poetry run pytest -s`
+
+Commandline options are documented at https://playwright.dev/python/docs/running-tests
