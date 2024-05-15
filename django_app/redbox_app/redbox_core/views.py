@@ -1,5 +1,6 @@
 import logging
 import os
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -7,6 +8,8 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from yarl import URL
+
 from redbox_app.redbox_core.client import CoreApiClient
 from redbox_app.redbox_core.models import (
     ChatHistory,
@@ -15,7 +18,7 @@ from redbox_app.redbox_core.models import (
     File,
     ProcessingStatusEnum,
 )
-from yarl import URL
+from redbox_app.redbox_core.types import FileStatus
 
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
@@ -187,6 +190,11 @@ def post_message(request: HttpRequest) -> HttpResponse:
     llm_message.save()
 
     return redirect(reverse(sessions_view, args=(session.id,)))
+
+
+def file_status(file_ids: list[uuid]) -> list[FileStatus]:
+    files_to_check = [file for file in file_ids if File.objects.filter(pk=file.id) and file.get_processing_status_text() != "complete"]
+    return []
 
 
 @require_http_methods(["GET"])
